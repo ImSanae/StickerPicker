@@ -4,4 +4,3 @@ pillow
 telethon
 cryptg
 python-magic
-python-socks[asyncio]

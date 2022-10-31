@@ -132,7 +132,7 @@ parser.add_argument("pack", help="Sticker pack URLs to import", action="append",
 
 async def main(args: argparse.Namespace) -> None:
     await matrix.load_config(args.config)
-    client = TelegramClient(args.session, 298751, "cb676d6bae20553c9996996a8f52b4d7", proxy=("http", "localhost", 7890))
+    client = TelegramClient(args.session, 298751, "cb676d6bae20553c9996996a8f52b4d7")
     await client.start()
 
     if args.list:
