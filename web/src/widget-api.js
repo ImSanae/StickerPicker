@@ -13,6 +13,8 @@
 //
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+import { focusSearchBar } from "./search-box.js"
+
 let widgetId = null
 
 window.onmessage = event => {
@@ -33,10 +35,12 @@ window.onmessage = event => {
 		widgetId = request.widgetId
 	}
 
-	let response
+	let response = {}
 
 	if (request.action === "visibility") {
-		response = {}
+		if (request.visible) {
+			focusSearchBar() // we have to re-focus the search bar when appropriate
+		}
 	} else if (request.action === "capabilities") {
 		response = { capabilities: ["m.sticker"] }
 	} else {
@@ -47,6 +51,11 @@ window.onmessage = event => {
 }
 
 export function sendSticker(content) {
+	if (content["info"]["net.maunium.telegram.sticker"] === undefined) {
+		// Old sticker, move the property to its new location
+		content["info"]["net.maunium.telegram.sticker"] = content["net.maunium.telegram.sticker"];
+		delete content["net.maunium.telegram.sticker"];
+	}
 	const data = {
 		content: { ...content },
 		// `name` is for Element Web (and also the spec)

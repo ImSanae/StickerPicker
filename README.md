@@ -1,41 +1,58 @@
-# Maunium sticker picker
-A fast and simple Matrix sticker picker widget. Tested on Element Web, Android & iOS.
+# Sanae's collection of Matrix sticker packs
 
-## Discussion
-Matrix room: [`#stickerpicker:maunium.net`](https://matrix.to/#/#stickerpicker:maunium.net)
+> [Preview address](https://matrix-stickers.pages.dev/)
 
-## Instructions
-For setup and usage instructions, please visit the [wiki](https://github.com/maunium/stickerpicker/wiki):
+## How to use this?
 
-* [Creating packs](https://github.com/maunium/stickerpicker/wiki/Creating-packs)
-* [Enabling the widget](https://github.com/maunium/stickerpicker/wiki/Enabling-the-widget)
-* [Hosting on GitHub pages](https://github.com/maunium/stickerpicker/wiki/Hosting-on-GitHub-pages)
+This picker only supports Element (Web, Electron, Android, iOS) clients as well as clients based on it.
 
-If you prefer video tutorials, [Brodie Robertson](https://www.youtube.com/c/BrodieRobertson) has made a great video on setting up the picker and creating some packs: https://youtu.be/Yz3H6KJTEI0.
+Type `/devtools` in any chat window of your Element (web or desktop) and send it, a Developer Tools window will open, select `Explore account data`, find `m.widgets` in it and add the following to the "content":
 
-## Comparison with other sticker pickers
+```
+{
+    "stickerpicker": {
+        "content": {
+            "type": "m.stickerpicker",
+            "url": "https://matrix-stickers.pages.dev/?theme=$theme",
+            "name": "Stickerpicker",
+            "creatorUserId": "@you:matrix.server.name",
+            "data": {}
+        },
+        "sender": "@you:matrix.server.name",
+        "state_key": "stickerpicker",
+        "type": "m.widget",
+        "id": "StickerPicker"
+    }
+}
+```
 
-* Scalar is the default integration manager in Element, which can't be self-hosted and only supports predefined sticker packs.
-* [Dimension](https://github.com/turt2live/matrix-dimension) is an alternate integration manager. It can be self-hosted, but it's more difficult than Maunium sticker picker.
-* Maunium sticker picker is just a sticker picker rather than a full integration manager. It's much simpler than integration managers, but currently has to be set up manually per-user.
+If m.widgets is not found, select `Explore account data` event directly in the bottom right corner, select `Send custom account data event` for the event type and fill in:
 
-| Feature                         | Scalar | Dimension | Maunium sticker picker |
-|---------------------------------|--------|-----------|------------------------|
-| Free software                   | ❌     | ✔️        | ✔️                     |
-| Custom sticker packs            | ❌     | ✔️        | ✔️                     |
-| Telegram import                 | ❌     | ✔️        | ✔️                     |
-| Works on Element mobiles        | ✔️     | ❌        | ✔️                     |
-| Easy multi-user setup           | ✔️     | ✔️        | ❌<sup>[#7][#7]</sup>  |
-| Frequently used stickers at top | ❌     | ❌        | ✔️                     |
 
-[#7]: https://github.com/maunium/stickerpicker/issues/7
+```
+{
+  "type": "m.widgets",
+  "content": {
+    "stickerpicker": {
+      "content": {
+        "type": "m.stickerpicker",
+        "url": "https://matrix-stickers.pages.dev/?theme=$theme",
+        "name": "Stickerpicker",
+        "creatorUserId": "@you:matrix.server.name",
+        "data": {}
+      },
+      "sender": "@you:matrix.server.name",
+      "state_key": "stickerpicker",
+      "type": "m.widget",
+      "id": "StickerPicker"
+    }
+  }
+}
+```
+The same account should only need to be set up once.
 
-## Preview
-### Element Web
-![Element Web](preview-element-web.png)
+## I'd like to add other stickers!
 
-### Element Android
-![Element Android](preview-element-android.png)
+You can fork this repository and follow the [Wiki](https://github.com/maunium/stickerpicker/wiki/Creating-packs) prompts to import new stickers.The repository welcomes new sticker requests, so please initiate Pull Requests (from A to Z) by sorting the links to the original sticker pack.
 
-### Element iOS (dark theme)
-![Element iOS](preview-element-ios.png)
+Note: The repository does not accept stickers that contain explicit pornographic content.

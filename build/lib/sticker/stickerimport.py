@@ -45,7 +45,7 @@ def add_meta(document: Document, info: matrix.StickerInfo, pack: StickerSetFull)
         if isinstance(attr, DocumentAttributeSticker):
             info["body"] = attr.alt
     info["id"] = f"tg-{document.id}"
-    info["net.maunium.telegram.sticker"] = {
+    info["info"]["net.maunium.telegram.sticker"] = {
         "pack": {
             "id": str(pack.set.id),
             "short_name": pack.set.short_name,
@@ -73,7 +73,7 @@ async def reupload_pack(client: TelegramClient, pack: StickerSetFull, output_dir
     try:
         with util.open_utf8(pack_path) as pack_file:
             existing_pack = json.load(pack_file)
-            already_uploaded = {int(sticker["net.maunium.telegram.sticker"]["id"]): sticker
+            already_uploaded = {int(sticker["info"]["net.maunium.telegram.sticker"]["id"]): sticker
                                 for sticker in existing_pack["stickers"]}
             print(f"Found {len(already_uploaded)} already reuploaded stickers")
     except FileNotFoundError:
@@ -97,7 +97,7 @@ async def reupload_pack(client: TelegramClient, pack: StickerSetFull, output_dir
             # If there was no sticker metadata, use the first emoji we find
             if doc["body"] == "":
                 doc["body"] = sticker.emoticon
-            doc["net.maunium.telegram.sticker"]["emoticons"].append(sticker.emoticon)
+            doc["info"]["net.maunium.telegram.sticker"]["emoticons"].append(sticker.emoticon)
 
     with util.open_utf8(pack_path, "w") as pack_file:
         json.dump({
@@ -132,7 +132,7 @@ parser.add_argument("pack", help="Sticker pack URLs to import", action="append",
 
 async def main(args: argparse.Namespace) -> None:
     await matrix.load_config(args.config)
-    client = TelegramClient(args.session, 298751, "cb676d6bae20553c9996996a8f52b4d7", proxy=("http", "localhost", 7890))
+    client = TelegramClient(args.session, 298751, "cb676d6bae20553c9996996a8f52b4d7")
     await client.start()
 
     if args.list:
@@ -153,7 +153,7 @@ async def main(args: argparse.Namespace) -> None:
                 return
             input_packs.append(InputStickerSetShortName(short_name=match.group(1)))
         for input_pack in input_packs:
-            pack: StickerSetFull = await client(GetStickerSetRequest(input_pack))
+            pack: StickerSetFull = await client(GetStickerSetRequest(input_pack, hash=0))
             await reupload_pack(client, pack, args.output_dir)
     else:
         parser.print_help()
